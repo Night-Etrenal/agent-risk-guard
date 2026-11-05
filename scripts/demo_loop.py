@@ -14,8 +14,14 @@ sys.path.insert(0, "/workspace/shared")
 from llm import ask  # noqa: E402
 
 BURNER = Path("/workspace/.secrets/reactive_omni_burner.json")
-DEPLOY = ROOT / "deployments" / "lasna-base-sepolia.json"
-BASE_RPC = os.environ.get("BASE_RPC", "https://sepolia.base.org")
+DEPLOY_CANDIDATES = [
+    ROOT / "deployments" / "lasna-sepolia.json",
+    ROOT / "deployments" / "lasna-base-sepolia.json",
+]
+ORIGIN_RPC = os.environ.get(
+    "ORIGIN_RPC",
+    os.environ.get("BASE_RPC", "https://ethereum-sepolia-rpc.publicnode.com"),
+)
 LASNA_RPC = os.environ.get("LASNA_RPC", "https://lasna-rpc.rnk.dev/")
 CAST = "/home/box/.foundry/bin/cast"
 
@@ -25,14 +31,30 @@ def sh(*args: str) -> str:
     return r.stdout.strip()
 
 
+def load_deploy() -> tuple[Path, dict]:
+    for path in DEPLOY_CANDIDATES:
+        if not path.exists():
+            continue
+        dep = json.loads(path.read_text())
+        contracts = dep.get("contracts") or {}
+        if contracts.get("AIRiskOracle", {}).get("address") and contracts.get("AgentVault", {}).get("address"):
+            return path, dep
+    raise SystemExit(
+        "No usable deployments JSON found (need AIRiskOracle + AgentVault). "
+        "Expected deployments/lasna-sepolia.json"
+    )
+
+
 def main() -> None:
     burner = json.loads(BURNER.read_text())
-    dep = json.loads(DEPLOY.read_text())
+    deploy_path, dep = load_deploy()
+    print("using deploy file:", deploy_path)
     pk = burner["private_key"]
     addr = burner["address"]
     oracle = dep["contracts"]["AIRiskOracle"]["address"]
     vault = dep["contracts"]["AgentVault"]["address"]
     reactive = dep["contracts"]["AgentGuardReactive"]["address"]
+    origin_rpc = dep.get("network", {}).get("originRpc") or ORIGIN_RPC
 
     intent = os.environ.get(
         "DEMO_INTENT",
@@ -40,6 +62,7 @@ def main() -> None:
     )
     print("=== AgentRiskGuard demo loop ===")
     print("intent:", intent)
+    print("origin rpc:", origin_rpc)
 
     prompt = (
         "You are an on-chain AI risk oracle for an autonomous agent wallet. "
@@ -62,7 +85,7 @@ def main() -> None:
     intent_hash = sh(CAST, "keccak", intent)
     print("intentHash:", intent_hash)
 
-    paused_before = sh(CAST, "call", vault, "paused()(bool)", "--rpc-url", BASE_RPC)
+    paused_before = sh(CAST, "call", vault, "paused()(bool)", "--rpc-url", origin_rpc)
     print("paused before:", paused_before)
 
     tx = sh(
@@ -77,7 +100,7 @@ def main() -> None:
         str(score),
         rationale,
         "--rpc-url",
-        BASE_RPC,
+        origin_rpc,
         "--private-key",
         pk,
         "--json",
@@ -90,7 +113,7 @@ def main() -> None:
     deadline = time.time() + 180
     paused = paused_before
     while time.time() < deadline:
-        paused = sh(CAST, "call", vault, "paused()(bool)", "--rpc-url", BASE_RPC)
+        paused = sh(CAST, "call", vault, "paused()(bool)", "--rpc-url", origin_rpc)
         print("paused:", paused)
         if paused in ("true", "True", "0x0000000000000000000000000000000000000000000000000000000000000001"):
             break
@@ -110,6 +133,9 @@ def main() -> None:
         "oracle": oracle,
         "vault": vault,
         "reactive": reactive,
+        "originRpc": origin_rpc,
+        "deployFile": str(deploy_path.name),
+        "network": dep.get("network"),
     }
     out = ROOT / "deployments" / "demo_loop_result.json"
     out.write_text(json.dumps(result, indent=2) + "\n")

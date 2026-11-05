@@ -6,16 +6,16 @@ import { IReactive } from "@reactive/src/interfaces/IReactive.sol";
 import { AbstractReactive } from "@reactive/src/base/AbstractReactive.sol";
 
 /// @title AgentGuardReactive
-/// @notice Lasna reactive contract: watches AIRiskOracle.RiskFlagged on Base Sepolia
-///         and callbacks AgentVault.freeze on the destination chain.
+/// @notice Lasna reactive contract: watches AIRiskOracle.RiskFlagged on a configured
+///         origin chain (e.g. Ethereum Sepolia) and callbacks AgentVault.freeze.
 contract AgentGuardReactive is AbstractReactive {
-    uint256 public constant BASE_SEPOLIA_CHAIN_ID = 84532;
     uint64 public constant CALLBACK_GAS_LIMIT = 1_000_000;
     uint8 public constant DEFAULT_THRESHOLD = 70;
 
     address public owner;
     address public oracle;
     address public vault;
+    uint256 public originChainId;
     uint256 public riskFlaggedTopic0;
     uint8 public threshold;
     uint256 public reactCount;
@@ -32,17 +32,24 @@ contract AgentGuardReactive is AbstractReactive {
         _;
     }
 
-    /// @param oracle_ AIRiskOracle address on Base Sepolia.
+    /// @param oracle_ AIRiskOracle address on the origin chain.
     /// @param riskFlaggedTopic0_ topic0 of RiskFlagged.
     /// @param threshold_ Minimum score that triggers freeze callback.
-    constructor(address oracle_, uint256 riskFlaggedTopic0_, uint8 threshold_) payable {
+    /// @param originChainId_ Chain id of the origin/destination (e.g. 11155111 Sepolia).
+    constructor(
+        address oracle_,
+        uint256 riskFlaggedTopic0_,
+        uint8 threshold_,
+        uint256 originChainId_
+    ) payable {
         owner = msg.sender;
         oracle = oracle_;
         riskFlaggedTopic0 = riskFlaggedTopic0_;
         threshold = threshold_ == 0 ? DEFAULT_THRESHOLD : threshold_;
+        originChainId = originChainId_;
 
         SYSTEM.subscribe(
-            BASE_SEPOLIA_CHAIN_ID,
+            originChainId_,
             oracle_,
             riskFlaggedTopic0_,
             REACTIVE_IGNORE,
@@ -69,7 +76,7 @@ contract AgentGuardReactive is AbstractReactive {
     function react(LogRecord calldata log_) external onlySystem {
         // RiskFlagged(address indexed agent, address indexed to, uint256 amount, bytes32 intentHash, uint8 score)
         // topics: [topic0, agent, to]; data ABI: (uint256 amount, bytes32 intentHash, uint8 score)
-        if (log_.chainId != BASE_SEPOLIA_CHAIN_ID) return;
+        if (log_.chainId != originChainId) return;
         if (log_.contractAddress != oracle) return;
         if (log_.topic0 != riskFlaggedTopic0) return;
 
@@ -89,7 +96,7 @@ contract AgentGuardReactive is AbstractReactive {
 
         SYSTEM.requestCallbackV_1_0(
             ISystemContract.CallbackConfiguration_V_1_0({
-                chainId: BASE_SEPOLIA_CHAIN_ID,
+                chainId: originChainId,
                 recipient: vault,
                 gasLimit: CALLBACK_GAS_LIMIT,
                 payload: payload

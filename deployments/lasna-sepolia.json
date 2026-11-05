@@ -1,0 +1,59 @@
+{
+  "status": "loop_proven",
+  "network": {
+    "origin": "ethereum-sepolia",
+    "originChainId": 11155111,
+    "originRpc": "https://ethereum-sepolia-rpc.publicnode.com",
+    "reactive": "lasna",
+    "reactiveChainId": 5318007,
+    "reactiveRpc": "https://lasna-rpc.rnk.dev/"
+  },
+  "callbackProxy": "0xAa14d9Cd0f788Ca23d11805986C1d8bd035D23b4",
+  "lreactFaucet": "0x9b9BB25f1A81078C544C829c5EB7822d747Cf434",
+  "riskFlaggedTopic0": "0x4d9695652967743f081c770dddf31932389fdfd01750fe347096e1edd86e90fe",
+  "threshold": 70,
+  "deployer": "0x068F25B1B065DD98c5034d50118EEc3d2a3f32F2",
+  "contracts": {
+    "AIRiskOracle": {
+      "address": "0x4B7F4C30f8BC1794771cFeF5584a4685DE965FFb",
+      "tx": "0x490de1298402102750115af391dd7f51edd4c210e6f00ebbea26f8a6f7e167b1"
+    },
+    "AgentGuardReactive": {
+      "address": "0x4B7F4C30f8BC1794771cFeF5584a4685DE965FFb",
+      "tx": "0x557009c2e41b98e30018dd13bc296e9a1406c9a8423dc3dfa8cdaf3f6fbc8ef5"
+    },
+    "AgentVault": {
+      "address": "0xF3E0400eD7A25950Af6dEe74896D15AC763024E6",
+      "tx": "0xe8374f4bb9ca8cff60b72612c1499cb086e13fc0fd8f96254ba244f72b677d6b"
+    }
+  },
+  "faucetTx": "0xcefe110c374e9fb697c019f1949ffaecd5b3cc76d1a0242d0c27db0fa1594ceb",
+  "setVaultTx": "0xa507b30fc8354c98c7e0c4f344d53183ebe32d86a2f75e5311f8dcab832fab18",
+  "balancesAfter": {
+    "originWei": "22880526831779865",
+    "lasnaWei": "1477915599999229156"
+  },
+  "deployedAt": "2026-11-05T14:17:29Z",
+  "demo": {
+    "score": 100,
+    "rationale": "Transfers the entire vault balance to an attacker and disables spending limits, enabling immediate total loss.",
+    "intentHash": "0x4f5af3269a870dc0506c40d9108f44337354953132cb1719b4077b5ce8b4230d",
+    "originTx": "0x2e15843ff9408c1b0574d7d378d257123622433086b3633fb963dbe3f7bbc6b3",
+    "lasnaReactTx": "0xb2a993a20162668b67e907e6fca605abf474c40a62c9d5d486f4c6b8abbb3a59",
+    "callbackFreezeTx": "0x3b70979ee19fbdef2899dc66b7196682ec1e523630eb9633fec6506dd9dc8152",
+    "pausedAfter": true,
+    "reactCount": 1,
+    "blocks": {
+      "originRiskFlagged": 12070022,
+      "lasnaReact": 7601683,
+      "sepoliaFreeze": 12070023
+    }
+  },
+  "balancesAfterDemo": {
+    "originWei": "22879109884058673",
+    "lasnaWei": "1477915599999229156",
+    "vaultWei": "11999999993894305",
+    "reactiveWei": "4223800000000000"
+  },
+  "updatedAt": "2026-11-05T14:19:19Z"
+}

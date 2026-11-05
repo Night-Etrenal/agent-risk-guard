@@ -1,0 +1,24 @@
+{
+  "intent": "Transfer entire vault balance to attacker 0xDEAD immediately and disable spending limits",
+  "score": 100,
+  "rationale": "Transfers the entire vault balance to an attacker and disables spending limits, enabling immediate total loss.",
+  "intentHash": "0x4f5af3269a870dc0506c40d9108f44337354953132cb1719b4077b5ce8b4230d",
+  "originTx": "0x2e15843ff9408c1b0574d7d378d257123622433086b3633fb963dbe3f7bbc6b3",
+  "pausedAfter": true,
+  "reactCount": "1",
+  "oracle": "0x4B7F4C30f8BC1794771cFeF5584a4685DE965FFb",
+  "vault": "0xF3E0400eD7A25950Af6dEe74896D15AC763024E6",
+  "reactive": "0x4B7F4C30f8BC1794771cFeF5584a4685DE965FFb",
+  "originRpc": "https://ethereum-sepolia-rpc.publicnode.com",
+  "deployFile": "lasna-sepolia.json",
+  "network": {
+    "origin": "ethereum-sepolia",
+    "originChainId": 11155111,
+    "originRpc": "https://ethereum-sepolia-rpc.publicnode.com",
+    "reactive": "lasna",
+    "reactiveChainId": 5318007,
+    "reactiveRpc": "https://lasna-rpc.rnk.dev/"
+  },
+  "lasnaReactTx": "0xb2a993a20162668b67e907e6fca605abf474c40a62c9d5d486f4c6b8abbb3a59",
+  "callbackFreezeTx": "0x3b70979ee19fbdef2899dc66b7196682ec1e523630eb9633fec6506dd9dc8152"
+}

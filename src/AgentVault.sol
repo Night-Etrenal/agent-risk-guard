@@ -6,8 +6,8 @@ import { AbstractCallback } from "@reactive/src/base/AbstractCallback.sol";
 
 /// @title AgentVault
 /// @notice ETH custody vault with per-tx spend limits; freezes via Reactive callback.
-/// @dev Deployed on Base Sepolia. Inherits AbstractCallback so only the authorized
-///      Lasna reactive contract (via the Base Sepolia callback proxy) can freeze it.
+/// @dev Deployed on the origin chain (Ethereum Sepolia by default). Inherits AbstractCallback so only the authorized
+///      Lasna reactive contract (via the origin-chain callback proxy) can freeze it.
 contract AgentVault is AbstractCallback {
     event SpendAttempted(
         address indexed agent,
@@ -40,7 +40,7 @@ contract AgentVault is AbstractCallback {
         _;
     }
 
-    /// @param callbackProxy_ Base Sepolia Reactive callback proxy.
+    /// @param callbackProxy_ Origin-chain Reactive callback proxy.
     /// @param callbackSender_ Address of the AgentGuardReactive contract on Lasna.
     /// @param agent_ Authorized agent EOA / contract allowed to spend.
     /// @param maxPerTx_ Maximum wei per spend call.

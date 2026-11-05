@@ -22,8 +22,10 @@ contract DeployReactive is Script {
         address oracle = vm.envAddress("ORACLE");
         uint256 topic0 = vm.envUint("RISK_TOPIC0");
         uint8 threshold = uint8(vm.envOr("THRESHOLD", uint256(70)));
+        uint256 originChainId = vm.envOr("ORIGIN_CHAIN_ID", uint256(11155111));
         vm.startBroadcast();
-        AgentGuardReactive reactive = new AgentGuardReactive{value: msg.value}(oracle, topic0, threshold);
+        AgentGuardReactive reactive =
+            new AgentGuardReactive{value: msg.value}(oracle, topic0, threshold, originChainId);
         console2.log("AgentGuardReactive", address(reactive));
         vm.stopBroadcast();
     }
