@@ -43,6 +43,13 @@ Uses the **Omni** Solidity library (`SYSTEM.subscribe` / `requestCallbackV_1_0`,
 - **Reactive Lasna**: chainId `5318007`, RPC `https://lasna-rpc.rnk.dev/`, explorer https://lasna.reactscan.net/, system `0x8888…8888`
 - **lREACT faucet (on Sepolia)**: `request(address)` on `0x9b9BB25f1A81078C544C829c5EB7822d747Cf434` (send Sepolia ETH; e.g. 0.015 ETH → 1.5 lREACT)
 
+## Demo video
+
+Narrated English walkthrough (~2:22, under the 3-minute limit):
+
+- **Public MP4 (no login):** https://github.com/Night-Etrenal/agent-risk-guard/releases/download/demo-v1/AgentRiskGuard-demo.mp4
+- Notes + hashes: [`docs/demo.md`](./docs/demo.md)
+
 ## How to demo
 
 ```bash
