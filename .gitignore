@@ -1,0 +1,28 @@
+# Foundry
+cache/
+out/
+broadcast/*/dry-run/
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+*.pem
+secrets/
+.secrets/
+
+# Node / python
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local burner copies (never commit)
+**/burner*.json
+**/private_key*

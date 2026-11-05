@@ -1,0 +1,14 @@
+{
+  "status": "pending_funding",
+  "network": {
+    "origin": "base-sepolia",
+    "originChainId": 84532,
+    "reactive": "lasna",
+    "reactiveChainId": 5318007
+  },
+  "callbackProxy": "0x476F44b11F5C942c58f4c8E3d0300E5710743585",
+  "riskFlaggedTopic0": "0x4d9695652967743f081c770dddf31932389fdfd01750fe347096e1edd86e90fe",
+  "threshold": 70,
+  "contracts": {},
+  "note": "Filled by scripts/deploy.sh once Base Sepolia faucet ETH is available."
+}

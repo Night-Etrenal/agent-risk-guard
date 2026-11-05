@@ -1,0 +1,18 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.29"
+optimizer = true
+optimizer_runs = 200
+evm_version = "cancun"
+ffi = false
+remappings = [
+  "forge-std/=lib/forge-std/src/",
+  "@reactive/=lib/reactive-lib-omni/",
+  "reactive-lib-omni/=lib/reactive-lib-omni/",
+]
+
+[rpc_endpoints]
+base_sepolia = "https://sepolia.base.org"
+lasna = "https://lasna-rpc.rnk.dev/"
