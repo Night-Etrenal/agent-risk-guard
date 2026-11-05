@@ -79,7 +79,7 @@ contract AgentGuardReactive is AbstractReactive {
             abi.decode(log_.data, (uint256, bytes32, uint8));
 
         if (score < threshold) return;
-        if (vault == address(0)) revert VaultNotSet();
+        if (vault == address(0)) return; // not configured yet; do not revert (Omni still bills reverts)
 
         bytes memory payload = abi.encodeWithSignature(
             "freeze(address,bytes32)",
